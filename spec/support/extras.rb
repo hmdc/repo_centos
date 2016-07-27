@@ -29,6 +29,18 @@ shared_examples_for 'repo_centos::extras' do |ver|
     it { should contain_yumrepo('centos-extras').with_baseurl("http://foo.example.com/centos/$releasever/extras/$basearch/") }
   end
 
+  context 'when repourl => ["http://foo.example.com/centos", "http://foo2.example.com/centos"]' do
+    let(:params) {{ :enable_mirrorlist => false,
+                    :repourl => [
+                      'http://foo.example.com/centos',
+                      'http://foo2.example.com/centos',
+    ]}}
+
+    it { should contain_yumrepo('centos-extras').with_baseurl(
+      "http://foo.example.com/centos/$releasever/extras/$basearch/ http://foo2.example.com/centos/$releasever/extras/$basearch/"
+    )}
+  end
+
   context 'when enable_extras => false' do
     let(:params) {{ :enable_extras => false }}
 

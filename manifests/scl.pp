@@ -23,8 +23,10 @@ class repo_centos::scl {
 
   $baseurl = $repo_centos::repourl ? {
     Array  => rstrip(join(
-      $repo_centos::repourl,
-      '/$releasever/SCL/$basearch/'
+      $repo_centos::repourl.map |$url| {
+        "${url}/\$releasever/SCL/\$basearch/"
+      },
+      ' ',
     )),
     String => "${repo_centos::repourl}/\$releasever/SCL/\$basearch/"
   }
@@ -36,7 +38,7 @@ class repo_centos::scl {
     }
 
     yumrepo { 'centos-scl':
-      baseurl  => "${repo_centos::repourl}/\$releasever/SCL/\$basearch/",
+      baseurl  => $baseurl,
       descr    => 'CentOS-$releasever - SCL',
       enabled  => $enabled,
       gpgcheck => '1',

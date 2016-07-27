@@ -18,11 +18,12 @@ class repo_centos::debug {
 
   $baseurl = $repo_centos::debug_repourl ? {
     Array  => rstrip(join(
-      $repo_centos::debug_repourl,
-      "/${repo_centos::releasever}/\$basearch/"
+      $repo_centos::debug_repourl.map |$url| {
+        "${url}/${repo_centos::releasever}/\$basearch/"
+      },
+      ' ',
     )),
-    String =>
-    "${repo_centos::debug_repourl}/${repo_centos::releasever}/\$basearch/",
+    String => "${repo_centos::debug_repourl}/${repo_centos::releasever}/\$basearch/"
   }
 
   # Yumrepo ensure only in Puppet >= 3.5.0

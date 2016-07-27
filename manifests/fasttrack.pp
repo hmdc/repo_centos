@@ -21,8 +21,10 @@ class repo_centos::fasttrack {
     $mirrorlist = 'absent'
     $baseurl = $repo_centos::repourl ? {
       Array  => rstrip(join(
-        $repo_centos::repourl,
-        '/$releasever/fasttrack/$basearch/'
+        $repo_centos::repourl.map |$url| {
+          "${url}/\$releasever/fasttrack/\$basearch/"
+        },
+        ' ',
       )),
       String => "${repo_centos::repourl}/\$releasever/fasttrack/\$basearch/"
     }

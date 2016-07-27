@@ -17,16 +17,20 @@ class repo_centos::source {
 
   $baseurl_source = $repo_centos::source_repourl ? {
     Array  => rstrip(join(
-      $repo_centos::source_repourl,
-      '/$releasever/os/Source/'
+      $repo_centos::source_repourl.map |$url| {
+        "${url}/\$releasever/os/Source/"
+      },
+      ' ',
     )),
     String => "${repo_centos::source_repourl}/\$releasever/os/Source/"
   }
 
   $baseurl_source_updates = $repo_centos::source_repourl ? {
     Array  => rstrip(join(
-      $repo_centos::source_repourl,
-      '/$releasever/updates/Source/'
+      $repo_centos::source_repourl.map |$url| {
+        "${url}/\$releasever/updates/Source/"
+      },
+      ' ',
     )),
     String => "${repo_centos::source_repourl}/\$releasever/updates/Source/"
   }

@@ -21,8 +21,10 @@ class repo_centos::extras {
     $mirrorlist = 'absent'
     $baseurl = $repo_centos::repourl ? {
       Array  => rstrip(join(
-        $repo_centos::repourl,
-        '/$releasever/extras/$basearch/'
+        $repo_centos::repourl.map |$url| {
+          "${url}/\$releasever/extras/\$basearch/"
+        },
+        ' ',
       )),
       String => "${repo_centos::repourl}/\$releasever/extras/\$basearch/"
     }

@@ -29,6 +29,18 @@ shared_examples_for 'repo_centos::fasttrack' do |ver|
     it { should contain_yumrepo('centos-fasttrack').with_baseurl("http://foo.example.com/centos/$releasever/fasttrack/$basearch/") }
   end
 
+  context 'when repourl => ["http://foo.example.com/centos", "http://foo2.example.com/centos"]' do
+    let(:params) {{ :enable_mirrorlist => false,
+                    :repourl => [
+                      'http://foo.example.com/centos',
+                      'http://foo2.example.com/centos',
+    ]}}
+
+    it { should contain_yumrepo('centos-fasttrack').with_baseurl(
+      "http://foo.example.com/centos/$releasever/fasttrack/$basearch/ http://foo2.example.com/centos/$releasever/fasttrack/$basearch/"
+    )}
+  end
+
   context 'when enable_fasttrack => true' do
     let(:params) {{ :enable_fasttrack => true }}
 

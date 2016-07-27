@@ -12,6 +12,18 @@ shared_examples_for 'repo_centos::scl' do |ver|
       })
     end
 
+    context 'when repourl => ["http://foo.example.com/centos", "http://foo2.example.com/centos"]' do
+      let(:params) {{ :enable_mirrorlist => false,
+                      :repourl => [
+                        'http://foo.example.com/centos',
+                        'http://foo2.example.com/centos',
+      ]}}
+
+      it { should contain_yumrepo('centos-scl').with_baseurl(
+        "http://foo.example.com/centos/$releasever/SCL/$basearch/ http://foo2.example.com/centos/$releasever/SCL/$basearch/"
+      )}
+    end
+
     context 'when repourl => "http://foo.example.com/centos"' do
       let(:params) {{ :repourl => 'http://foo.example.com/centos' }}
 
