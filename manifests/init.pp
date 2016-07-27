@@ -82,14 +82,20 @@ class repo_centos (
 
   validate_bool($enable_mirrorlist)
 
-  case ($repourl) {
-    Array: {}
-    String: {}
-    default: fail('$repourl must be either an Array or a String.')
+  # This validates whether the URL(s) provided as repourls, transformed
+  # later into baseurls, are either Arrays or Strings.
+  {
+    '$repourl'        => $repourl,
+    '$debug_repourl'  => $debug_repourl,
+    '$source_repourl' => $source_repourl,
+  }.each |$argument, $value| {
+    case ($value) {
+      Array: {}
+      String: {}
+      default: fail("${argument} must be either an Array or a String.")
+    }
   }
-
-  validate_string($debug_repourl)
-  validate_string($source_repourl)
+  
   validate_string($mirrorlisturl)
   validate_bool($enable_base)
   validate_bool($enable_contrib)
