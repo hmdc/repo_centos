@@ -17,8 +17,10 @@ class repo_centos::cr {
 
   $baseurl = $repo_centos::repourl ? {
     Array  => rstrip(join(
-      $repo_centos::repourl,
-      '/$releasever/cr/$basearch/'
+      $repo_centos::repourl.map |$url| {
+        "${url}/\$releasever/cr/\$basearch/"
+      },
+      ' ',
     )),
     String => "${repo_centos::repourl}/\$releasever/cr/\$basearch/"
   }
