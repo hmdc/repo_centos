@@ -36,7 +36,8 @@ class repo_centos::updates {
     enabled    => $enabled,
     gpgcheck   => '1',
     gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
-    #priority   => '1',
+    priority   => $repo_centos::priority_updates,
+    exclude    => $repo_centos::priority_exclude,
   }
 
 }

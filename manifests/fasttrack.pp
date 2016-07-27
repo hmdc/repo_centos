@@ -45,7 +45,8 @@ class repo_centos::fasttrack {
     enabled    => $enabled,
     gpgcheck   => '1',
     gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
-    #priority   => '2',
+    priority   => $repo_centos::priority_fasttrack,
+    exclude    => $repo_centos::exclude_fasttrack,
   }
 
 }

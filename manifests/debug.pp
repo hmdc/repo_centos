@@ -37,6 +37,8 @@ class repo_centos::debug {
     enabled  => $enabled,
     gpgcheck => '1',
     gpgkey   => $_gpgkey,
+    priority => $repo_centos::priority_debug,
+    exclude  => $repo_centos::exclude_debug,
   }
 
 }

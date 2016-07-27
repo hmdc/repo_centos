@@ -35,6 +35,11 @@ class repo_centos::source {
     String => "${repo_centos::source_repourl}/\$releasever/updates/Source/"
   }
 
+  Yumrepo {
+    priority => $repo_centos::priority_source,
+    exclude  => $repo_centos::exclude_source,
+  }
+
   yumrepo { 'centos-base-source':
     baseurl  => $baseurl_source,
     descr    => 'CentOS-$releasever - Base Sources',

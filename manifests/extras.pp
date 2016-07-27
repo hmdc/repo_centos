@@ -42,7 +42,8 @@ class repo_centos::extras {
     enabled    => $enabled,
     gpgcheck   => '1',
     gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
-    #priority   => '2',
+    priority   => $repo_centos::priority_extras,
+    exclude    => $repo_centos::exclude_extras,
   }
 
 }

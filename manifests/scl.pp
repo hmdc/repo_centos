@@ -38,12 +38,13 @@ class repo_centos::scl {
     }
 
     yumrepo { 'centos-scl':
-      baseurl  => $baseurl,
-      descr    => 'CentOS-$releasever - SCL',
-      enabled  => $enabled,
-      gpgcheck => '1',
-      gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
-      #priority => '1',
+      baseurl   => $baseurl,
+      descr     => 'CentOS-$releasever - SCL',
+      enabled   => $enabled,
+      gpgcheck  => '1',
+      gpgkey    => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
+      priority  => $repo_centos::priority_scl,
+      exclude   => $repo_centos::exclude_scl,
     }
   }
 }
