@@ -8,6 +8,8 @@ shared_examples_for 'repo_centos::updates' do |ver|
       :enabled  => '1',
       :gpgcheck => '1',
       :gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-#{ver}",
+      :priority => nil,
+      :exclude  => nil,
     })
   end
 

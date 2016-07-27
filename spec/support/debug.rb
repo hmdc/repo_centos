@@ -8,6 +8,8 @@ shared_examples_for 'repo_centos::debug' do |ver|
       :enabled  => '0',
       :gpgcheck => '1',
       :gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-Debug-#{ver}",
+      :exclude  => nil,
+      :priority => nil,
     })
   end
 

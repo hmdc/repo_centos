@@ -129,6 +129,32 @@ class repo_centos (
   validate_bool($enable_source)
   validate_bool($enable_debug)
 
+  # Ensures that priorities and excludes are strings if defined.
+  [
+    $priority_base,
+    $priority_contrib,
+    $priority_cr,
+    $priority_extras,
+    $priority_plus,
+    $priority_scl,
+    $priority_updates,
+    $priority_debug,
+    $exclude_base,
+    $exclude_contrib,
+    $exclude_cr,
+    $exclude_extras,
+    $exclude_plus,
+    $exclude_scl,
+    $exclude_updates,
+    $exclude_debug,
+  ].each |$setting| {
+    if ($setting) {
+      validate_string($setting)
+    }
+  }
+
+
+
   if $::operatingsystem == 'CentOS' {
     stage { 'repo_centos_clean':
       before  => Stage['main'],
