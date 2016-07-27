@@ -1,12 +1,12 @@
 {
-  "name": "treydock-repo_centos",
-  "version": "3.0.2",
-  "author": "treydock",
+  "name": "hmdc-repo_centos",
+  "version": "3.0.3",
+  "author": "hmdc",
   "license": "Apache-2.0",
   "summary": "Manage the CentOS YUM repositories on CentOS clients.",
-  "source": "https://github.com/treydock/repo_centos.git",
-  "project_page": "https://github.com/treydock/repo_centos",
-  "issues_url": "https://github.com/treydock/repo_centos/issues",
+  "source": "https://github.com/hmdc/repo_centos.git",
+  "project_page": "https://github.com/hmdc/repo_centos",
+  "issues_url": "https://github.com/hmdc/repo_centos/issues",
   "tags": [ "repository", "repo", "RPM", "yum" ],
   "dependencies": [
     {
