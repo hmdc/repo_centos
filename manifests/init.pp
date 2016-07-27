@@ -81,7 +81,13 @@ class repo_centos (
   ) inherits repo_centos::params {
 
   validate_bool($enable_mirrorlist)
-  validate_string($repourl)
+
+  case ($repourl) {
+    Array: {}
+    String: {}
+    default: fail('$repourl must be either an Array or a String.')
+  }
+
   validate_string($debug_repourl)
   validate_string($source_repourl)
   validate_string($mirrorlisturl)
