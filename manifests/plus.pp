@@ -19,7 +19,13 @@ class repo_centos::plus {
     $baseurl = 'absent'
   } else {
     $mirrorlist = 'absent'
-    $baseurl = "${repo_centos::repourl}/\$releasever/centosplus/\$basearch/"
+    $baseurl = $repo_centos::repourl ? {
+      Array  => rstrip(join(
+        $repo_centos::repourl,
+        '/$releasever/centosplus/$basearch/'
+      )),
+      String => "${repo_centos::repourl}/\$releasever/centosplus/\$basearch/"
+    }
   }
 
   #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus

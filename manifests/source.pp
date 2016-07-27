@@ -15,8 +15,24 @@ class repo_centos::source {
     Yumrepo <| title == 'centos-updates-source' |> { ensure => $repo_centos::ensure_source }
   }
 
+  $baseurl_source = $repo_centos::source_repourl ? {
+    Array  => rstrip(join(
+      $repo_centos::source_repourl,
+      '/$releasever/os/Source/'
+    )),
+    String => "${repo_centos::source_repourl}/\$releasever/os/Source/"
+  }
+
+  $baseurl_source_updates = $repo_centos::source_repourl ? {
+    Array  => rstrip(join(
+      $repo_centos::source_repourl,
+      '/$releasever/updates/Source/'
+    )),
+    String => "${repo_centos::source_repourl}/\$releasever/updates/Source/"
+  }
+
   yumrepo { 'centos-base-source':
-    baseurl  => "${repo_centos::source_repourl}/\$releasever/os/Source/",
+    baseurl  => $baseurl_source,
     descr    => 'CentOS-$releasever - Base Sources',
     enabled  => $enabled,
     gpgcheck => '1',
@@ -24,7 +40,7 @@ class repo_centos::source {
   }
 
   yumrepo { 'centos-updates-source':
-    baseurl  => "${repo_centos::source_repourl}/\$releasever/updates/Source/",
+    baseurl  => $baseurl_source_updates,
     descr    => 'CentOS-$releasever - Updates Sources',
     enabled  => $enabled,
     gpgcheck => '1',

@@ -19,7 +19,13 @@ class repo_centos::fasttrack {
     $baseurl = 'absent'
   } else {
     $mirrorlist = 'absent'
-    $baseurl = "${repo_centos::repourl}/\$releasever/fasttrack/\$basearch/"
+    $baseurl = $repo_centos::repourl ? {
+      Array  => rstrip(join(
+        $repo_centos::repourl,
+        '/$releasever/fasttrack/$basearch/'
+      )),
+      String => "${repo_centos::repourl}/\$releasever/fasttrack/\$basearch/"
+    }
   }
 
   #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=fasttrack

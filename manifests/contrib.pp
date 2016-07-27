@@ -14,11 +14,14 @@ class repo_centos::contrib {
     $baseurl = 'absent'
   } else {
     $mirrorlist = 'absent'
-    $baseurl = "${repo_centos::repourl}/\$releasever/contrib/\$basearch/"
+    $baseurl = $repo_centos::repourl ? {
+      Array  => rstrip(join(
+        $repo_centos::repourl,
+        '/$releasever/contrib/$basearch/'
+      )),
+      String => "${repo_centos::repourl}/\$releasever/contrib/\$basearch/"
+    }
   }
-
-  #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=contrib
-  #baseurl=http://mirror.centos.org/centos/$releasever/contrib/$basearch/
 
   # Yumrepo ensure only in Puppet >= 3.5.0
   if versioncmp($::puppetversion, '3.5.0') >= 0 {

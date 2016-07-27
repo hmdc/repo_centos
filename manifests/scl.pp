@@ -21,7 +21,13 @@ class repo_centos::scl {
     $enabled = '0'
   }
 
-  #baseurl=http://mirror.centos.org/centos/$releasever/SCL/$basearch/
+  $baseurl = $repo_centos::repourl ? {
+    Array  => rstrip(join(
+      $repo_centos::repourl,
+      '/$releasever/SCL/$basearch/'
+    )),
+    String => "${repo_centos::repourl}/\$releasever/SCL/\$basearch/"
+  }
 
   if $repo_centos::releasever == '6' {
     # Yumrepo ensure only in Puppet >= 3.5.0
