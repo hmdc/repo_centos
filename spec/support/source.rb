@@ -8,6 +8,8 @@ shared_examples_for 'repo_centos::source' do |ver|
       :enabled  => '0',
       :gpgcheck => '1',
       :gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-#{ver}",
+      :priority => nil,
+      :exclude  => nil,
     })
   end
 
@@ -19,6 +21,22 @@ shared_examples_for 'repo_centos::source' do |ver|
       :gpgcheck => '1',
       :gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-#{ver}",
     })
+  end
+
+  context 'when repourl => ["http://foo.example.com/centos-source", "http://foo2.example.com/centos-source"]' do
+    let(:params) {{ :enable_mirrorlist => false,
+                    :source_repourl => [
+                      'http://foo.example.com/centos-source',
+                      'http://foo2.example.com/centos-source',
+    ]}}
+
+    it { should contain_yumrepo('centos-base-source').with_baseurl(
+      "http://foo.example.com/centos-source/$releasever/os/Source/ http://foo2.example.com/centos-source/$releasever/os/Source/"
+    )}
+
+    it { should contain_yumrepo('centos-updates-source').with_baseurl(
+      "http://foo.example.com/centos-source/$releasever/updates/Source/ http://foo2.example.com/centos-source/$releasever/updates/Source/"
+    )}
   end
 
   context 'when repourl => "http://foo.example.com/centos-source"' do

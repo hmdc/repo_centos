@@ -15,7 +15,15 @@ class repo_centos::cr {
     $enabled = '0'
   }
 
-  #baseurl=http://mirror.centos.org/centos/$releasever/cr/$basearch/
+  $baseurl = $repo_centos::repourl ? {
+    Array  => rstrip(join(
+      $repo_centos::repourl.map |$url| {
+        "${url}/\$releasever/cr/\$basearch/"
+      },
+      ' ',
+    )),
+    String => "${repo_centos::repourl}/\$releasever/cr/\$basearch/"
+  }
 
   # Yumrepo ensure only in Puppet >= 3.5.0
   if versioncmp($::puppetversion, '3.5.0') >= 0 {
@@ -23,12 +31,13 @@ class repo_centos::cr {
   }
 
   yumrepo { 'centos-cr':
-    baseurl  => "${repo_centos::repourl}/\$releasever/cr/\$basearch/",
+    baseurl  => $baseurl,
     descr    => 'CentOS-$releasever - CR',
     enabled  => $enabled,
     gpgcheck => '1',
     gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
-    #priority => '1',
+    priority => $repo_centos::priority_cr,
+    exclude  => $repo_centos::exclude_cr,
   }
 
 }

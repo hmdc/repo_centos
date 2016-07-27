@@ -19,7 +19,15 @@ class repo_centos::fasttrack {
     $baseurl = 'absent'
   } else {
     $mirrorlist = 'absent'
-    $baseurl = "${repo_centos::repourl}/\$releasever/fasttrack/\$basearch/"
+    $baseurl = $repo_centos::repourl ? {
+      Array  => rstrip(join(
+        $repo_centos::repourl.map |$url| {
+          "${url}/\$releasever/fasttrack/\$basearch/"
+        },
+        ' ',
+      )),
+      String => "${repo_centos::repourl}/\$releasever/fasttrack/\$basearch/"
+    }
   }
 
   #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=fasttrack
@@ -37,7 +45,8 @@ class repo_centos::fasttrack {
     enabled    => $enabled,
     gpgcheck   => '1',
     gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
-    #priority   => '2',
+    priority   => $repo_centos::priority_fasttrack,
+    exclude    => $repo_centos::exclude_fasttrack,
   }
 
 }

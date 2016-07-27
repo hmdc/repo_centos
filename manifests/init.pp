@@ -53,6 +53,7 @@
 #   repo_centos::enable_scl: true
 #
 class repo_centos (
+    $releasever                  = $repo_centos::params::releasever,
     $enable_mirrorlist           = $repo_centos::params::enable_mirrorlist,
     $repourl                     = $repo_centos::params::repourl,
     $debug_repourl               = $repo_centos::params::debug_repourl,
@@ -78,12 +79,44 @@ class repo_centos (
     $ensure_fasttrack            = $repo_centos::params::ensure_fasttrack,
     $ensure_source               = $repo_centos::params::ensure_source,
     $ensure_debug                = $repo_centos::params::ensure_debug,
+    $priority_base               = $repo_centos::params::priority_base,
+    $priority_contrib            = $repo_centos::params::priority_contrib,
+    $priority_cr                 = $repo_centos::params::priority_cr,
+    $priority_extras             = $repo_centos::params::priority_extras,
+    $priority_plus               = $repo_centos::params::priority_plus,
+    $priority_scl                = $repo_centos::params::priority_scl,
+    $priority_updates            = $repo_centos::params::priority_updates,
+    $priority_debug              = $repo_centos::params::priority_debug,
+    $exclude_base                = $repo_centos::params::exclude_base,
+    $exclude_contrib             = $repo_centos::params::exclude_contrib,
+    $exclude_cr                  = $repo_centos::params::exclude_cr,
+    $exclude_extras              = $repo_centos::params::exclude_extras,
+    $exclude_plus                = $repo_centos::params::exclude_plus,
+    $exclude_scl                 = $repo_centos::params::exclude_scl,
+    $exclude_updates             = $repo_centos::params::exclude_updates,
+    $exclude_debug               = $repo_centos::params::exclude_debug
   ) inherits repo_centos::params {
 
   validate_bool($enable_mirrorlist)
-  validate_string($repourl)
-  validate_string($debug_repourl)
-  validate_string($source_repourl)
+
+  # This validates whether the URL(s) provided as repourls, transformed
+  # later into baseurls, are either Arrays or Strings.
+  $arguments = {
+    '$repourl'       => $repourl,
+    '$debug_repourl' => $debug_repourl,
+    '$source_report' => $source_repourl,
+  }
+
+  $arguments.each |$argument, $value| {
+    case ($value) {
+      Array: {}
+      String: {}
+      default: {
+        fail("${argument} must be Array or String.")
+      }
+    }
+  }
+
   validate_string($mirrorlisturl)
   validate_bool($enable_base)
   validate_bool($enable_contrib)
@@ -96,9 +129,33 @@ class repo_centos (
   validate_bool($enable_source)
   validate_bool($enable_debug)
 
-  if $::operatingsystem == 'CentOS' {
-    $releasever = $repo_centos::params::releasever
+  # Ensures that priorities and excludes are strings if defined.
+  [
+    $priority_base,
+    $priority_contrib,
+    $priority_cr,
+    $priority_extras,
+    $priority_plus,
+    $priority_scl,
+    $priority_updates,
+    $priority_debug,
+    $exclude_base,
+    $exclude_contrib,
+    $exclude_cr,
+    $exclude_extras,
+    $exclude_plus,
+    $exclude_scl,
+    $exclude_updates,
+    $exclude_debug,
+  ].each |$setting| {
+    if ($setting) {
+      validate_string($setting)
+    }
+  }
 
+
+
+  if $::operatingsystem == 'CentOS' {
     stage { 'repo_centos_clean':
       before  => Stage['main'],
     }

@@ -21,7 +21,15 @@ class repo_centos::scl {
     $enabled = '0'
   }
 
-  #baseurl=http://mirror.centos.org/centos/$releasever/SCL/$basearch/
+  $baseurl = $repo_centos::repourl ? {
+    Array  => rstrip(join(
+      $repo_centos::repourl.map |$url| {
+        "${url}/\$releasever/SCL/\$basearch/"
+      },
+      ' ',
+    )),
+    String => "${repo_centos::repourl}/\$releasever/SCL/\$basearch/"
+  }
 
   if $repo_centos::releasever == '6' {
     # Yumrepo ensure only in Puppet >= 3.5.0
@@ -30,12 +38,13 @@ class repo_centos::scl {
     }
 
     yumrepo { 'centos-scl':
-      baseurl  => "${repo_centos::repourl}/\$releasever/SCL/\$basearch/",
-      descr    => 'CentOS-$releasever - SCL',
-      enabled  => $enabled,
-      gpgcheck => '1',
-      gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
-      #priority => '1',
+      baseurl   => $baseurl,
+      descr     => 'CentOS-$releasever - SCL',
+      enabled   => $enabled,
+      gpgcheck  => '1',
+      gpgkey    => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
+      priority  => $repo_centos::priority_scl,
+      exclude   => $repo_centos::exclude_scl,
     }
   }
 }

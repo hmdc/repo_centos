@@ -19,11 +19,16 @@ class repo_centos::extras {
     $baseurl = 'absent'
   } else {
     $mirrorlist = 'absent'
-    $baseurl = "${repo_centos::repourl}/\$releasever/extras/\$basearch/"
+    $baseurl = $repo_centos::repourl ? {
+      Array  => rstrip(join(
+        $repo_centos::repourl.map |$url| {
+          "${url}/\$releasever/extras/\$basearch/"
+        },
+        ' ',
+      )),
+      String => "${repo_centos::repourl}/\$releasever/extras/\$basearch/"
+    }
   }
-
-  #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
-  #baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
 
   # Yumrepo ensure only in Puppet >= 3.5.0
   if versioncmp($::puppetversion, '3.5.0') >= 0 {
@@ -37,7 +42,8 @@ class repo_centos::extras {
     enabled    => $enabled,
     gpgcheck   => '1',
     gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${repo_centos::releasever}",
-    #priority   => '2',
+    priority   => $repo_centos::priority_extras,
+    exclude    => $repo_centos::exclude_extras,
   }
 
 }

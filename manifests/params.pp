@@ -52,4 +52,22 @@ class repo_centos::params {
     }
     default: { }
   }
+
+  $priority_base               = undef
+  $priority_contrib            = undef
+  $priority_cr                 = undef
+  $priority_extras             = undef
+  $priority_plus               = undef
+  $priority_scl                = undef
+  $priority_updates            = undef
+  $priority_debug              = undef
+  $exclude_base                = undef
+  $exclude_contrib             = undef
+  $exclude_cr                  = undef
+  $exclude_extras              = undef
+  $exclude_plus                = undef
+  $exclude_scl                 = undef
+  $exclude_updates             = undef
+  $exclude_debug               = undef
+
 }

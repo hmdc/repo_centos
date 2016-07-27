@@ -1,6 +1,12 @@
-## treydock-repo_centos changelog
+## hmdc-repo_centos changelog
+
 
 Release notes for the treydock-repo_centos module.
+
+#### 3.0.3 - 2016/07/27
+* Allow repo_baseurl, source_baseurl, and debug_baseurl to be an array
+  or a string.
+* Add support for priorities and exclusions on a per-repository basis.
 
 #### 3.0.2 - 2015/12/17
 

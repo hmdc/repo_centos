@@ -14,11 +14,14 @@
 
 This is a puppet module that manages the CentOS repositories on CentOS clients.
 
-Originally based off of https://github.com/flakrat/repo_centos
+Originally based off of https://github.com/treydock/repo_centos
 
 **NOTE**: The current behavior of this module is to remove the repo files shipped with CentOS and to define all CentOS repos using names that differ from the stock operating system.  The `4.x` release will remove this behavior.
 
 ## Usage
+
+# To Do
+* Add spec tests for Amazon operating system.
 
 ### Class: `repo_centos`
 
@@ -30,6 +33,18 @@ A custom repository can be used by setting the `repourl` parameter and disabling
 
     class { 'repo_centos':
       repourl           => 'http://myrepo/centos',
+      enable_mirrorlist => false,
+      enable_scl        => true,
+    }
+
+`repourl` parameter can also be an array, if multiple baseurls need to
+be set.
+
+    class { 'repo_centos':
+      repourl           => [
+                            'http://myrepo/centos',
+                            'http://myrepo-2/centos',
+                           ],
       enable_mirrorlist => false,
       enable_scl        => true,
     }
@@ -91,7 +106,7 @@ Boolean to decide if the yumrepo mirrorlist or the baseurl are used (defaults to
 
 #####`repourl`
 
-The base repo URL.  Defaults to `http://mirror.centos.org/centos`.
+The base repo URL, array or string.  Defaults to `http://mirror.centos.org/centos`.
 
 #####`debug_repourl`
 
